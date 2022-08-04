@@ -1,0 +1,15 @@
+.headerContainer {
+  height: 15rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding-bottom: 5rem;
+
+  background: var(--purple-500);
+
+  img {
+    height: 4rem;
+  }
+}

@@ -1,0 +1,17 @@
+.confirmModalHeader {
+  height: 7rem;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  background: var(--purple-500);
+}
+
+.confirmModalFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 2.5rem 4rem;
+}
