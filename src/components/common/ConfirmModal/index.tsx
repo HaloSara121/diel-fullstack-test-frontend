@@ -34,6 +34,7 @@ export function ConfirmModal({ isOpen, onClose, text, action }: ConfirmModalProp
       <header className={styles.confirmModalHeader}>
         <h2>{text}</h2>
       </header>
+      
       <footer className={styles.confirmModalFooter}>
         <Button onClick={onClose} text="Cancelar" color="var(--red-500)" />
         <Button onClick={() => {

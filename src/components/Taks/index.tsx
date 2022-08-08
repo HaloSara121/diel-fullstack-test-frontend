@@ -1,5 +1,6 @@
 import { Pencil, Trash } from "phosphor-react"
-import { useState } from "react"
+import { useCallback, useState } from "react"
+import { api } from "../../services/api"
 import { descriptionEllipsised } from "../../utils/descriptionEllipsised"
 import { ConfirmModal } from "../common/ConfirmModal"
 import { NewTaskModal } from "../NewTaskModal"
@@ -13,6 +14,14 @@ export function Task({ task }: TaskProps) {
   const [deleteTaskModalConfirmationIsOpen, setDeleteTaskModalConfirmationIsOpen] = useState(false)
   const [editTaskModalConfirmationIsOpen, setEditTaskModalConfirmationIsOpen] = useState(false)
 
+  const deleteTask = useCallback(async () => {
+    await api.delete(`/tasks/${task.id}`)
+  }, [])
+
+  const durationInMin = task.durationInMin
+  const durationInHours = Math.floor(durationInMin / 60)
+  const minRemaining = Math.floor(durationInMin % 60) 
+  
   return (
     <li className={styles.task}>
       <strong title={task.title}>
@@ -20,10 +29,14 @@ export function Task({ task }: TaskProps) {
       </strong>
 
       <span title={task.description}>
-        {descriptionEllipsised(task.description, 120)}
+        {descriptionEllipsised(task.description, 90)}
       </span>
 
-      <time>{task.durationInMin} min</time>  
+      <time>
+        {durationInMin >= 60 
+        ? `${durationInHours} horas e ${minRemaining} min` 
+        : `${durationInMin} min`}
+      </time>  
 
       <div className={styles.editSection}>
         <Pencil 
@@ -49,7 +62,7 @@ export function Task({ task }: TaskProps) {
         text="Você deseja excluir essa tarefa?" 
         isOpen={deleteTaskModalConfirmationIsOpen} 
         onClose={() => setDeleteTaskModalConfirmationIsOpen(state => !state)}
-        action={() => console.log("tarefa deletada")} 
+        action={deleteTask} 
       />
     </li>
   )

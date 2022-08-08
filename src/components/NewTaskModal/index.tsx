@@ -7,6 +7,7 @@ import { Button } from "../common/Button"
 import { Input } from "../common/Input"
 
 import styles from "./styles.module.scss"
+import { api } from "../../services/api"
 
 interface NewTaskModalProps {
   isOpen: boolean
@@ -17,7 +18,7 @@ interface NewTaskModalProps {
 const NewTaskFormValidation = zod.object({
   title: zod.string().min(1, "O titulo é obrigatório"),
   durationInMin: zod.number().min(5, "A duração minima é 5 minutos"),
-  description: zod.string().optional(),
+  description: zod.string(),
 })
 
 type NewTaskFormData = zod.infer<typeof NewTaskFormValidation>
@@ -28,8 +29,32 @@ export function NewTaskModal({ isOpen, onClose, initialData }: NewTaskModalProps
     defaultValues: initialData
   })
 
+  async function createNewTask(data: NewTaskFormData) {
+    await api.post('/tasks', {
+      data: {
+        ...data
+      }
+    })
+  }
+
+  async function updateTask(data: Task) {
+    await api.put('/tasks', {
+      data: {
+        taskData: data
+      }
+    })
+  }
+
   function NewTaskFormSubmit(data: NewTaskFormData) {
-    console.log(data)
+    if(initialData) {
+      updateTask({
+        id: initialData.id,
+        ...data
+      })
+    } else {
+      createNewTask(data)
+    }
+    onClose()
   }
 
   return (
