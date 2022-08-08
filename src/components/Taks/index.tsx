@@ -34,7 +34,7 @@ export function Task({ task }: TaskProps) {
 
       <time>
         {durationInMin >= 60 
-        ? `${durationInHours} horas e ${minRemaining} min` 
+        ? `${durationInHours} horas ${minRemaining > 0 ? `e ${minRemaining} min` : ''}`
         : `${durationInMin} min`}
       </time>  
 
