@@ -16,7 +16,7 @@ export function TaskList() {
 
   const { data, isValidating } = useSWR("/tasks", async () => {
     return await api.get<{ tasks: Task[] }>("/tasks")
-  }, { refreshInterval: 1000, revalidateOnFocus: true })
+  }, { revalidateOnFocus: true })
   
   const tasks = data?.data.tasks
   const filteredTasks = tasks?.filter(task => task.title.includes(search.trim()))
@@ -42,7 +42,7 @@ export function TaskList() {
       </header>
 
       <ul className={styles.list}>
-        {isValidating && !tasks && ( <div className={styles.ldsring} ><div></div><div></div><div></div><div></div></div> )}
+        {isValidating && tasks?.length === 0 && ( <div className={styles.ldsring} ><div></div><div></div><div></div><div></div></div> )}
 
         {filteredTasks?.length === 0 && tasks?.map((task: Task) => (
           <Task 
@@ -58,7 +58,7 @@ export function TaskList() {
             />
         ))}
         
-        {tasks?.length === 0 && (
+        {tasks?.length === 0 && !isValidating && (
           <div className={styles.emptyTasks}>
             <Flag size={48} />
             <p>Nenhuma Tarefa pendente</p>
